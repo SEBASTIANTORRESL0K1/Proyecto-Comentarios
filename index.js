@@ -3,16 +3,17 @@ const btnEnviar=document.getElementById("btnEnviar");
 const btn=document.getElementById("btn");
 const credenciales=document.getElementById("credenciales");
 credenciales.classList.toggle("visibilidad");
+let usuarioActivo;
 let usuarios=[];
 function buscarUsuarios(usuarios){
     let nombre=document.getElementById("nombre").value;
     let password=document.getElementById("password").value;
     for(let i=0;i<usuarios.length;i++){
         if(usuarios[i].nombre==nombre&&usuarios[i].password==password){
-            return true;
+            return usuarios[i].nombre;
         }
     }
-    return false;
+    return null;
 }
 btnSinCuenta.addEventListener("click",()=>{
     const btnSinCuenta=document.getElementById("btnSinCuenta");
@@ -24,13 +25,14 @@ btnSinCuenta.addEventListener("click",()=>{
 })
 btnRegistrarse.addEventListener("click",()=>{
     let res=buscarUsuarios(usuarios);
-    if(res){
-       let app=document.getElementById("app");
-       app.classList.toggle("visibilidad");
-       const btnRegistrarse=document.getElementById("btnRegistrarse");
-       btnRegistrarse.classList.toggle("visibilidad");
-       let credenciales=document.getElementById("credenciales");
-         credenciales.classList.toggle("visibilidad");
+    if(res!=null){
+        let app=document.getElementById("app");
+        app.classList.toggle("visibilidad");
+        const btnRegistrarse=document.getElementById("btnRegistrarse");
+        btnRegistrarse.classList.toggle("visibilidad");
+        let credenciales=document.getElementById("credenciales");
+        credenciales.classList.toggle("visibilidad");
+       
     } else{
         let nombre=document.getElementById("nombre").value;
         let password=document.getElementById("password").value;
@@ -48,13 +50,14 @@ btnRegistrarse.addEventListener("click",()=>{
 })
 btnEnviar.addEventListener("click",()=>{
     let res=buscarUsuarios(usuarios);
-    if(res){
-       let app=document.getElementById("app");
-       app.classList.toggle("visibilidad");
-       const btnRegistrarse=document.getElementById("btnRegistrarse");
-       btnRegistrarse.classList.toggle("visibilidad");
-       let credenciales=document.getElementById("credenciales");
-         credenciales.classList.toggle("visibilidad");
+    if(res!=null){
+        let app=document.getElementById("app");
+        app.classList.toggle("visibilidad");
+        const btnRegistrarse=document.getElementById("btnRegistrarse");
+        btnRegistrarse.classList.toggle("visibilidad");
+        let credenciales=document.getElementById("credenciales");
+        credenciales.classList.toggle("visibilidad");
+        usuarioActivo=res;
     } else{
         setTimeout(()=>{
             alert("Usuario o contraseña incorrectos");
@@ -69,7 +72,7 @@ btn.addEventListener("click",()=>{
     let text=document.getElementById("text").value;
     let fechaActual= new Date();
     if(contador==0&&revisarSiEstaVacio()){
-        cont.innerHTML+=`<div id="div${contador}" class="comment"><p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth()}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getSeconds()}</span></div></div>`;
+        cont.innerHTML+=`<div id="div${contador}" class="comment"><p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth()}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getSeconds()}</span><span>👤:${usuarioActivo}</span></div></div>`;
         
         contador++;
     } else{
@@ -78,7 +81,7 @@ btn.addEventListener("click",()=>{
             nuevoDiv.classList.add("comment");
             nuevoDiv.id=`div${contador}`;
             let nuevoParrafo=document.createElement("p");
-            nuevoDiv.innerHTML=`<p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth()}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getSeconds()}</span></div>`;
+            nuevoDiv.innerHTML=`<p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth()}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getSeconds()}</span><span>👤:${usuarioActivo}</span></div>`;
             cont.insertBefore(nuevoDiv, cont.firstChild);
             contador++;
            
@@ -101,3 +104,4 @@ function EliminarComentario(id){
     let div=document.getElementById(`div${id}`);
     cont.removeChild(div);
 }
+function recuperarNombreUsuario(){}
