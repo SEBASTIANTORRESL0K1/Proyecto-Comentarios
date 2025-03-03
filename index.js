@@ -63,7 +63,18 @@ btnEnviar.addEventListener("click", () => {
             let cont = document.getElementById("container");
             for (let i = 0; i < comentarios.length; i++) {
                 console.log(comentarios[i]);
-                cont.innerHTML += `<div id="div${i}" class="comment"><p id='p${i}' class='parrafo'>${comentarios[i].comentario}</p><button class='btn' onclick="EliminarComentario(${i})">Eliminar</button><div class="time"><span>Fecha:${comentarios[i].fecha} </span><span>Hora: ${comentarios[i].hora}</span><span>👤:${comentarios[i].nombre}</span></div></div>`;
+                cont.innerHTML += `<div id="div${i}" class="comment"><p id='p${i}' class='parrafo'>${comentarios[i].comentario}</p><button class='btn' id="btn${i}" onclick="EliminarComentario(${i})">Eliminar</button><div class="time"><span>Fecha:${comentarios[i].fecha} </span><span>Hora: ${comentarios[i].hora}</span><span>👤:${comentarios[i].nombre}</span></div></div>`;
+            }
+            for(let i=0;i<comentarios.length;i++){
+                if(usuarioActivo==comentarios[i].nombre){
+                    document.getElementById(`div${i}`).style.backgroundColor="lightblue";
+                }
+                else{
+                    let cont=document.getElementById(`div${i}`);
+                    let btn=document.getElementById(`btn${i}`);
+                    cont.removeChild(btn);
+
+                }
             }
         }
     } else {
