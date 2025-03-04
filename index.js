@@ -17,6 +17,21 @@ function buscarUsuarios(usuarios) {
     }
     return null;
 }
+function buscarComentario(divid) {
+    let comentario = divid.children[0].textContent;
+    let fecha = divid.children[2].children[0].children[0].textContent;
+    let hora = divid.children[2].children[1].children[0].textContent;
+    let usuario = divid.children[2].children[2].children[0].textContent;
+    let res = null;
+
+    for (let i = 0; i < comentarios.length; i++) {
+        if (comentarios[i].comentario === comentario && comentarios[i].fecha === fecha && comentarios[i].hora === hora && comentarios[i].nombre === usuario) {
+            res = comentarios[i];
+           
+        }
+    }
+    return res;
+}
 
 btnSinCuenta.addEventListener("click", () => {
     const btnRegistrarse = document.getElementById("btnRegistrarse");
@@ -61,9 +76,18 @@ btnEnviar.addEventListener("click", () => {
         usuarioActivo = res;
         if (comentarios.length > 0) {
             let cont = document.getElementById("container");
-            for (let i = 0; i < comentarios.length; i++) {
+            for (let i = comentarios.length-1; i >=0 ; i--) {
                 console.log(comentarios[i]);
-                cont.innerHTML += `<div id="div${i}" class="comment"><p id='p${i}' class='parrafo'>${comentarios[i].comentario}</p><button class='btn' id="btn${i}" onclick="EliminarComentario(${i})">Eliminar</button><div class="time"><span>Fecha:${comentarios[i].fecha} </span><span>Hora: ${comentarios[i].hora}</span><span>👤:${comentarios[i].nombre}</span></div></div>`;
+                cont.innerHTML += 
+                `<div id="div${i}" class="comment">
+                    <p id='p${i}' class='parrafo'>${comentarios[i].comentario}</p>
+                    <button class='btn' id="btn${i}" onclick="EliminarComentario(${i})">Eliminar</button>
+                    <div class="time">
+                        <p>Fecha: <span id="spnFecha${i}">${comentarios[i].fecha}</span></p>
+                        <p>Hora: <span id="spnHora${i}">${comentarios[i].hora}</span></p>
+                        <p>👤: <span id="spnUsuario${i}">${comentarios[i].nombre}</span></p>
+                    </div>
+                </div>`;
             }
             for(let i=0;i<comentarios.length;i++){
                 if(usuarioActivo==comentarios[i].nombre){
@@ -90,7 +114,16 @@ btn.addEventListener("click", () => {
     let text = document.getElementById("text").value;
     let fechaActual = new Date();
     if (contador == 0 && revisarSiEstaVacio()) {
-        cont.innerHTML += `<div id="div${contador}" class="comment"><p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getMinutes()}</span><span>👤:${usuarioActivo}</span></div></div>`;
+        cont.innerHTML += 
+        `<div id="div${contador}" class="comment">
+            <p id='p${contador}' class='parrafo'>${text}</p>
+            <button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button>
+            <div class="time">
+                <p>Fecha: <span id="spnFecha${contador}">${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}</span></p>
+                <p>Hora: <span id="spnHora${contador}">${fechaActual.getHours()}:${fechaActual.getMinutes()}</span></p>
+                <p>👤:<span id="spnUsuario${contador}">${usuarioActivo}</span></p>
+            </div>
+        </div>`;
         comentarios.push({ nombre: usuarioActivo, comentario: text, fecha: `${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}`, hora: `${fechaActual.getHours()}:${fechaActual.getMinutes()}` });
         contador++;
         console.log(comentarios);
@@ -99,7 +132,14 @@ btn.addEventListener("click", () => {
             let nuevoDiv = document.createElement("div");
             nuevoDiv.classList.add("comment");
             nuevoDiv.id = `div${contador}`;
-            nuevoDiv.innerHTML = `<p id='p${contador}' class='parrafo'>${text}</p><button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button><div class="time"><span>Fecha: ${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}</span><span>Hora: ${fechaActual.getHours()}:${fechaActual.getMinutes()}</span><span>👤:${usuarioActivo}</span></div>`;
+            nuevoDiv.innerHTML = 
+            `<p id='p${contador}' class='parrafo'>${text}</p>
+            <button class='btn' onclick="EliminarComentario(${contador})">Eliminar</button>
+            <div class="time">
+                <p>Fecha: <span id="spnFecha${contador}">${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}</span></p>
+                <p>Hora: <span id="spnHora${contador}">${fechaActual.getHours()}:${fechaActual.getMinutes()}</span></p>
+                <p>👤: <span id="spnUsuario${contador}">${usuarioActivo}</span></p>
+            </div>`;
             cont.insertBefore(nuevoDiv, cont.firstChild);
             contador++;
             comentarios.push({ nombre: usuarioActivo, comentario: text, fecha: `${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}`, hora: `${fechaActual.getHours()}:${fechaActual.getMinutes()}` });
@@ -119,6 +159,13 @@ function revisarSiEstaVacio() {
 function EliminarComentario(id) {
     let cont = document.getElementById("container");
     let div = document.getElementById(`div${id}`);
+    let comentarioEliminado = buscarComentario(div);
+    for (let i = 0; i < comentarios.length; i++) {
+        if (comentarios[i] === comentarioEliminado) {
+            comentarios.splice(i, 1);
+            break;
+        }
+    }
     cont.removeChild(div);
 }
 
